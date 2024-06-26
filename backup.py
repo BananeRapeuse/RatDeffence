@@ -1,3 +1,4 @@
+import os
 import paramiko
 
 def backup_to_sftp(local_path, sftp_server, sftp_username, sftp_password):

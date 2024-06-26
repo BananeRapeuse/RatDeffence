@@ -1,13 +1,16 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
-from scanner.py import scan_directory
-from quarantine.py import quarantine_file, get_quarantined_files
-from backup.py import backup_to_sftp
+from scanner import scan_directory
+from quarantine import quarantine_file, get_quarantined_files
+from backup import backup_to_sftp
+from assets.styles import set_styles
 
 class AntivirusApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Antivirus")
+
+        set_styles()  # Appliquer les styles définis
 
         # Menu
         menubar = tk.Menu(self.root)
@@ -19,15 +22,15 @@ class AntivirusApp:
         self.root.config(menu=menubar)
 
         # Main frame
-        self.main_frame = tk.Frame(self.root)
+        self.main_frame = ttk.Frame(self.root, style="TFrame")
         self.main_frame.pack(fill=tk.BOTH, expand=True)
 
         # Scan Progress
-        self.progress = ttk.Progressbar(self.main_frame, orient="horizontal", length=300, mode="determinate")
+        self.progress = ttk.Progressbar(self.main_frame, orient="horizontal", length=300, mode="determinate", style="TProgressbar")
         self.progress.pack(pady=10)
 
         # Textbox for results
-        self.result_text = tk.Text(self.main_frame, height=15, width=50)
+        self.result_text = tk.Text(self.main_frame, height=15, width=50, font=("Courier", 10))
         self.result_text.pack(pady=10)
 
         self.show_main_menu()
@@ -36,13 +39,13 @@ class AntivirusApp:
         self.clear_frame()
         self.progress.pack(pady=10)
         self.result_text.pack(pady=10)
-        scan_button = tk.Button(self.main_frame, text="Start Scan", command=self.start_scan)
+        scan_button = ttk.Button(self.main_frame, text="Start Scan", command=self.start_scan, style="TButton")
         scan_button.pack(pady=10)
 
     def show_quarantine(self):
         self.clear_frame()
         quarantined_files = get_quarantined_files()
-        tk.Label(self.main_frame, text="Quarantined Files:").pack(pady=10)
+        tk.Label(self.main_frame, text="Quarantined Files:", background="#F0F0F0").pack(pady=10)
         listbox = tk.Listbox(self.main_frame)
         listbox.pack(pady=10)
         for file in quarantined_files:
@@ -50,8 +53,8 @@ class AntivirusApp:
 
     def show_backup(self):
         self.clear_frame()
-        tk.Label(self.main_frame, text="Backup Directory:").pack(pady=10)
-        backup_button = tk.Button(self.main_frame, text="Start Backup", command=self.start_backup)
+        tk.Label(self.main_frame, text="Backup Directory:", background="#F0F0F0").pack(pady=10)
+        backup_button = ttk.Button(self.main_frame, text="Start Backup", command=self.start_backup, style="TButton")
         backup_button.pack(pady=10)
 
     def clear_frame(self):
